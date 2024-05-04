@@ -101,7 +101,7 @@ class BookmarksController extends AppController
     public function add()
     {
         // Crea una nueva entidad de Bookmark
-        $bookmark = $this->Bookmarks->newEntity();
+        $bookmark = $this->Bookmarks->newEntity([]);
         
         // Verifica si la solicitud es de tipo POST
         if ($this->request->is('post')) {
