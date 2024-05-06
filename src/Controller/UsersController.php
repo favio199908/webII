@@ -15,7 +15,7 @@ class UsersController extends AppController
     {
         parent::initialize();
         // Añade logout a la lista de actiones permitidas.
-        $this->Auth->allow(['logout', 'add']);
+        $this->Auth->allow(['logout', 'add','index','view','add','edit','delete']);
     }
     public function logout()
     {
@@ -24,7 +24,7 @@ class UsersController extends AppController
         
         // Redirige al usuario a la página de inicio de sesión después de cerrar sesión
         return $this->redirect($this->Auth->logout());
-    }
+    }   
     
     public function login()
     {
@@ -67,6 +67,7 @@ class UsersController extends AppController
     {
         $user = $this->Users->get($id, [
             'contain' => ['Bookmarks'],
+            
         ]);
 
         $this->set(compact('user'));
@@ -116,7 +117,7 @@ class UsersController extends AppController
         $this->set(compact('user'));
     }
 
-    /**
+    /*
      * Delete method
      *
      * @param string|null $id User id.
@@ -127,12 +128,21 @@ class UsersController extends AppController
     {
         $this->request->allowMethod(['post', 'delete']);
         $user = $this->Users->get($id);
+        
+        // Desactivar restricciones de clave externa
+        $this->Users->getConnection()->disableForeignKeys();
+
+        // Eliminar usuario
         if ($this->Users->delete($user)) {
             $this->Flash->success(__('The user has been deleted.'));
         } else {
             $this->Flash->error(__('The user could not be deleted. Please, try again.'));
         }
 
+        // Reactivar restricciones de clave externa
+        $this->Users->getConnection()->enableForeignKeys();
+
         return $this->redirect(['action' => 'index']);
     }
+
 }

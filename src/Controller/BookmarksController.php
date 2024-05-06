@@ -60,21 +60,25 @@ class BookmarksController extends AppController
      *
      * @return \Cake\Http\Response|null|void Renders view
      */
-    public function index()
-    {
-        // Configura la paginación para mostrar solo los bookmarks del usuario actual
-        $this->paginate = [
-            'conditions' => [
-                'Bookmarks.user_id' => $this->Auth->user('id'),
-            ]
-        ];
-        
-        // Obtiene y asigna los bookmarks del usuario actual para mostrar en la vista
-        $this->set('bookmarks', $this->paginate($this->Bookmarks));
-        
-        // Configura la serialización de los bookmarks para enviarlos como datos serializados
-        $this->viewBuilder()->setOption('serialize', ['bookmarks']);
-    }
+    // En el método index del BookmarksController
+public function index()
+{
+    // Configura la paginación para mostrar solo los bookmarks del usuario actual
+    $this->paginate = [
+        'contain' => ['Users'], // Carga la asociación con los usuarios
+        'conditions' => [
+            'Bookmarks.user_id' => $this->Auth->user('id'),
+        ]
+    ];
+    
+    // Obtiene y asigna los bookmarks del usuario actual para mostrar en la vista
+    $bookmarks = $this->paginate($this->Bookmarks);
+    
+    // Configura la serialización de los bookmarks para enviarlos como datos serializados
+    $this->viewBuilder()->setOption('serialize', ['bookmarks']);
+
+    $this->set(compact('bookmarks')); // Asigna los bookmarks a la vista
+}
     
 
     /**
