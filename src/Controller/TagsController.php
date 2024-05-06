@@ -11,6 +11,18 @@ namespace App\Controller;
  */
 class TagsController extends AppController
 {
+    public function initialize(): void
+    {
+        parent::initialize();
+        $this->loadComponent('Flash'); // Include the FlashComponent
+    }
+
+    public function isAuthorized($user)
+    {
+        // Todas las acciones en este controlador están disponibles solo para usuarios autenticados
+        return true;
+    }
+
     /**
      * Index method
      *

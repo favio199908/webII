@@ -18,8 +18,8 @@ $routes->scope(
 $routes->scope('/', function ($routes) {
     // Connect the default home and /pages/* routes.
     $routes->connect('/', [
-        'controller' => 'Pages',
-        'action' => 'display', 'home'
+        'controller' => 'users',
+        'action' => 'login'
     ]);
     $routes->connect('/pages/*', [
         'controller' => 'Pages',
